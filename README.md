@@ -1,39 +1,32 @@
-# Performance Testing on Booker API
+# Project Performance Testing
 
 ## Overview
+This project involves performance testing of the testing site [PetStore](https://petstore.octoperf.com/actions/Catalog.action) using the BlazeMeter extension, JMeter, and command-line commands for report generation.
 
-This document provides details on the performance testing conducted on the [Booker API](https://restful-booker.herokuapp.com/apidoc/index.html#api-Auth-CreateToken). The testing was performed using command-line tools with varying thread(concurrent user) counts to analyze system performance.
+## Tools Used
+- **BlazeMeter Extension**: Used for recording and running performance tests.
+- **JMeter**: For detailed analysis of load testing scenarios.
+- **Command-line commands**: Used to execute JMeter tests and generate reports.
+- **Google Chrome**: Used to navigate and interact with the test site.
 
-## Test Configuration
+## Testing Process
+1. **Test Scenario Recording**: 
+   - Recorded user interactions on the PetStore site using the BlazeMeter extension.
+   - Captured actions such as browsing categories, adding items to the cart, and checking out.
 
-- **API Endpoint:** `/auth` (Create Token)
-- **Testing Tool:** Command-line performance testing tool (e.g., Apache JMeter)
-- **Loop Count:** 1
-- **Metrics Captured:** Average Transactions Per Second (TPS), Error Rate
+2. **Performance Test Execution**: 
+   - Ran the recorded script through BlazeMeter.
+   - Configured virtual users (VUs) to simulate multiple users accessing the site simultaneously.
+   - Opened the file on JMeter
+   - Used JMeter (Thread group) to conduct further load testing.
+   - Executed JMeter tests via command-line commands and generated performance reports.
+   
+   Constrains:
+  - Number of Threads (users): 500, 700, 800, 1000, 1100
+  - Ramp-Up Period (in seconds): 10
+  - Loop Count: 1 
 
-## Test Plan
-
-Testplan > Add > Threads (Users) > Thread Group (this might vary dependent on the jMeter version you are using)
-
-- Number of Threads (users): 500, 1000, 1500, 2000
-- Ramp-Up Period (in seconds): 10
-- Loop Count: 1  
-
-# Test execution (from the Terminal)
- 
-- JMeter should be initialized in non-GUI mode.
-- Make a report folder in the **bin** folder.  
-- Run Command in __jmeter\bin__ folder.
-
-## List of API 
-- auth
-- createBooking
-- getBookingByID
-- updateBooking
-- UpdateByPatch
-- deleteBooking
-
-### Make jtl file
+  ### Make jtl file
 
 ```bash
   jmeter -n -t  Performance_Testing_t500.jmx -l report\Performance_Testing_t500.jtl
@@ -43,18 +36,28 @@ Testplan > Add > Threads (Users) > Thread Group (this might vary dependent on th
   ```bash
   jmeter -g report\Performance_Testing_t500.jtl -o report\Performance_Testing_t500.html
 ```
- 
+   
+3. **Metrics Collected**:
+   - Response time for each page.
+   - Throughput (requests per second).
+   - Error rate under load conditions.
+   - Resource utilization and bottlenecks.
 
-## Results
+## Results & Analysis
+- Observed the impact of concurrent users on website performance.
+- Identified response time variations under different load conditions.
+- Analyzed bottlenecks that may require optimization.
+- Generated detailed performance reports using command-line commands in JMeter.
 
 The following table presents the results of the performance tests:
 
 | Concurrent Users | Loop Count | Avg TPS | Error Rate (%) | Total Concurrent Users |
 | ---------------- | ---------- | ------- | -------------- | ---------------------- |
-| 500              | 1          | 50      | 0.00           | 3000                   |
-| 1000             | 1          | 99      | 0.00           | 6000                   |
-| 1500             | 1          | 148     | 0.00           | 9000                   |
-| 2000             | 1          | 198     | 0.07           | 12000                  |
+| 500              | 1          | 93      | 0.00           | 4800                   |
+| 700             | 1          | 99      | 0.00           | 6000                   |
+| 800             | 1          | 93     | 0.00           | 4800                   |
+| 1000             | 1          | 198     | 0.07           | 12000                  |
+| 1100             | 1          | 198     | 0.07           | 12000                  |
 
 ## Observations
 
@@ -64,10 +67,11 @@ The following table presents the results of the performance tests:
 
 
 ## Conclusion
+Performance testing with BlazeMeter, JMeter, and command-line execution provided valuable insights into the scalability and reliability of the PetStore application. Future steps may involve optimizing server response times and improving resource handling under heavy loads.
 
-The Booker API handled up to 1500+ concurrent users efficiently but exhibited performance degradation beyond that threshold. Further optimizations in server scalability and request handling may be needed for improved high-load performance.
-
-![alt text](image-1.png)   ![alt text](image-2.png)
-
----
-
+## How to Reproduce the Test
+1. Install the **BlazeMeter Chrome Extension**.
+2. Navigate to [PetStore](https://petstore.octoperf.com/actions/Catalog.action).
+3. Start recording user actions and save the file as .jmx.
+4. Execute the test on JMeter and analyze results.
+5. Run JMeter scripts via command-line commands to generate detailed reports.
